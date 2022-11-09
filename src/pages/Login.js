@@ -34,7 +34,7 @@ class Login extends Component {
 
   handleClick = async () => {
     const api = await getApi();
-    console.log(api);
+    // console.log(api);
     const { history } = this.props;
     history.push('/home');
     localStorage.setItem('token', api.token);
