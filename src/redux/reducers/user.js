@@ -1,11 +1,9 @@
 import { GET_USER_INFO } from '../actions';
 
 const INITIAL_STATE = {
-  user: {
-    name: '',
-    email: '',
-    score: 0,
-  },
+  emailG: '',
+  nome: '',
+  score: 0,
 };
 
 function userReducer(state = INITIAL_STATE, action) {
@@ -13,7 +11,8 @@ function userReducer(state = INITIAL_STATE, action) {
   case GET_USER_INFO:
     return {
       ...state,
-      user: action.payload,
+      emailG: action.payload.email,
+      nome: action.payload.nome,
     };
   default:
     return state;
