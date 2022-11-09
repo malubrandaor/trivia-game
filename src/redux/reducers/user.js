@@ -1,13 +1,23 @@
+import { GET_USER_INFO } from '../actions';
+
 const INITIAL_STATE = {
-  name: '',
-  email: '',
+  user: {
+    name: '',
+    email: '',
+    score: 0,
+  },
 };
 
-const user = (state = INITIAL_STATE, action) => {
+function userReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
+  case GET_USER_INFO:
+    return {
+      ...state,
+      user: action.payload,
+    };
   default:
     return state;
   }
-};
+}
 
-export default user;
+export default userReducer;
