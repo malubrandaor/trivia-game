@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import getApi from '../services/api';
 // import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
 
 class Login extends Component {
   constructor() {
@@ -28,6 +29,14 @@ class Login extends Component {
         });
       }
     });
+  };
+
+  handleClick = async () => {
+    const api = await getApi();
+    console.log(api);
+    const { history } = this.props;
+    history.push('/home');
+    localStorage.setItem('token', api.token);
   };
 
   render() {
@@ -58,7 +67,7 @@ class Login extends Component {
           data-testid="btn-play"
           type="button"
           disabled={ isDisabled }
-          // onClick={}
+          onClick={ this.handleClick }
         >
           Play
         </button>
@@ -67,4 +76,9 @@ class Login extends Component {
   }
 }
 
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 export default connect()(Login);
