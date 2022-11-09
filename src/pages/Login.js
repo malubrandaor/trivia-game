@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import getApi from '../services/api';
+import SettingsButton from '../components/SetingsButton';
 // import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
 
 class Login extends Component {
   constructor() {
@@ -30,49 +32,67 @@ class Login extends Component {
     });
   };
 
-  // handleClick = async () => {
-  //   const { dispatch } = this.props;
-  //   const { name, email } = this.state:
+  handleClick = async () => {
+    const api = await getApi();
+    console.log(api);
+    const { history } = this.props;
+    history.push('/home');
+    localStorage.setItem('token', api.token);
+  };
 
-  // }
+  handleSettingsButton = () => {
+    const { history } = this.props;
+    history.push('/settings');
+    console.log(history);
+    console.log('go');
+  };
 
   render() {
     const { nome, email, isDisabled } = this.state;
     return (
-      <form>
-        <label htmlFor="nome">
-          Name
-          <input
-            name="nome"
-            type="text"
-            data-testid="input-player-name"
-            value={ nome }
-            id="nome"
-            onChange={ this.handleChange }
-          />
-        </label>
-        <label htmlFor="email">
-          <input
-            name="email"
-            type="text"
-            data-testid="input-gravatar-email"
-            value={ email }
-            onChange={ this.handleChange }
-          />
-        </label>
-        <button
-          data-testid="btn-play"
-          type="button"
-          disabled={ isDisabled }
-          onClick={ () => {
+      <div>
+        <div>
+          <SettingsButton handleSettingsButton={ this.handleSettingsButton } />
+        </div>
+        <form>
+          <label htmlFor="nome">
+            Name
+            <input
+              name="nome"
+              type="text"
+              data-testid="input-player-name"
+              value={ nome }
+              id="nome"
+              onChange={ this.handleChange }
+            />
+          </label>
+          <label htmlFor="email">
+            <input
+              name="email"
+              type="text"
+              data-testid="input-gravatar-email"
+              value={ email }
+              onChange={ this.handleChange }
+            />
+          </label>
+          <button
+            data-testid="btn-play"
+            type="button"
+            disabled={ isDisabled }
+            onClick={ this.handleClick }
+          >
+            Play
+          </button>
+        </form>
+      </div>
 
-          } }
-        >
-          Play
-        </button>
-      </form>
     );
   }
 }
 
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 export default connect()(Login);
