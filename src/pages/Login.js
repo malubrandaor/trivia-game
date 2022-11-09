@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import getApi from '../services/api';
 import SettingsButton from '../components/SetingsButton';
-// import { connect } from 'react-redux';
+import { getUserInfo } from '../redux/actions';
 
 class Login extends Component {
   constructor() {
@@ -33,11 +33,13 @@ class Login extends Component {
   };
 
   handleClick = async () => {
+    const { nome, email } = this.state;
     const api = await getApi();
-    // console.log(api);
-    const { history } = this.props;
-    history.push('/home');
+    console.log(api);
+    const { history, dispatch } = this.props;
     localStorage.setItem('token', api.token);
+    dispatch(getUserInfo({ nome, email }));
+    history.push('/home');
   };
 
   handleSettingsButton = () => {
@@ -91,6 +93,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
