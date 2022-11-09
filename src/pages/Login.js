@@ -30,6 +30,12 @@ class Login extends Component {
     });
   };
 
+  // handleClick = async () => {
+  //   const { dispatch } = this.props;
+  //   const { name, email } = this.state:
+
+  // }
+
   render() {
     const { nome, email, isDisabled } = this.state;
     return (
@@ -58,7 +64,9 @@ class Login extends Component {
           data-testid="btn-play"
           type="button"
           disabled={ isDisabled }
-          // onClick={}
+          onClick={ () => {
+
+          } }
         >
           Play
         </button>
