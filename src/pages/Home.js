@@ -5,6 +5,8 @@ import { getQuestions } from '../services/api';
 import Header from '../components/Header';
 import { resetUser } from '../redux/actions';
 
+const TIMEOUT_TIME = 30000;
+
 function shuffleArray(array) {
   const newArr = [...array];
   for (let i = array.length - 1; i > 0; i -= 1) {
@@ -22,6 +24,7 @@ class Home extends React.Component {
       questions: [],
       answers: [],
       selectedAnswer: undefined,
+      answerTimeout: false,
     };
   }
 
@@ -46,6 +49,12 @@ class Home extends React.Component {
       questions: api.results,
       answers,
     });
+
+    setTimeout(() => {
+      this.setState({
+        answerTimeout: true,
+      });
+    }, TIMEOUT_TIME);
   }
 
   selectAnswer(index) {
@@ -60,7 +69,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { selectedAnswer, answers, questions, question } = this.state;
+    const { selectedAnswer, answers, questions, question, answerTimeout } = this.state;
 
     return (
       <div>
@@ -79,6 +88,7 @@ class Home extends React.Component {
                   <button
                     key={ i }
                     type="button"
+                    disabled={ answerTimeout }
                     style={
                       typeof selectedAnswer !== 'undefined'
                         ? this.borderAnswer(answer.correct)
