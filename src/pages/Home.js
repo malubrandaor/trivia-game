@@ -20,6 +20,8 @@ class Home extends React.Component {
     this.state = {
       question: 0,
       questions: [],
+      answers: [],
+      selectedAnswer: undefined,
     };
   }
 
@@ -32,23 +34,33 @@ class Home extends React.Component {
       return history.push('/');
     }
 
-    this.setState({
-      question: 0,
-      questions: api.results,
-    });
-  }
-
-  render() {
-    const { questions, question } = this.state;
-
-    const answers = shuffleArray(questions.length > 0 ? [
-      { answer: questions[question].correct_answer, correct: true },
-      ...questions[question].incorrect_answers.map((ia) => (
+    const answers = shuffleArray(api.results.length > 0 ? [
+      { answer: api.results[0].correct_answer, correct: true },
+      ...api.results[0].incorrect_answers.map((ia) => (
         { answer: ia, correct: false }
       )),
     ] : []);
 
-    console.log(answers);
+    this.setState({
+      question: 0,
+      questions: api.results,
+      answers,
+    });
+  }
+
+  selectAnswer(index) {
+    this.setState({
+      selectedAnswer: index,
+    });
+  }
+
+  borderAnswer(correct) {
+    return correct
+      ? { border: '3px solid rgb(6, 240, 15)' } : { border: '3px solid red' };
+  }
+
+  render() {
+    const { selectedAnswer, answers, questions, question } = this.state;
 
     return (
       <div>
@@ -67,9 +79,15 @@ class Home extends React.Component {
                   <button
                     key={ i }
                     type="button"
+                    style={
+                      typeof selectedAnswer !== 'undefined'
+                        ? this.borderAnswer(answer.correct)
+                        : undefined
+                    }
                     data-testid={ answer.correct
                       ? 'correct-answer'
                       : `wrong-answer-${i}` }
+                    onClick={ () => this.selectAnswer(i) }
                   >
                     {answer.answer}
                   </button>
