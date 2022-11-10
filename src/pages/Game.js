@@ -16,6 +16,7 @@ function shuffleArray(array) {
   return newArr;
 }
 
+
 class Game extends React.Component {
   constructor() {
     super();
@@ -36,6 +37,8 @@ class Game extends React.Component {
       dispatch(resetUser());
       return history.push('/');
     }
+
+    this.stopWatch();
 
     const answers = shuffleArray(api.results.length > 0 ? [
       { answer: api.results[0].correct_answer, correct: true },
@@ -62,10 +65,54 @@ class Game extends React.Component {
     console.log('clicou');
   };
 
+  stopWatch = () => {
+    const one = 1000;
+    setInterval(() => {
+      this.answerTime();
+    // console.log(test);
+    }, one);
+  };
+
+  answerTime = () => {
+    let second = 1;
+    second += 1;
+    return second;
+  };
+
+  dificultLevel = () => {
+    const { questions } = this.state;
+    const answerChoice = questions[0];
+    const { difficulty } = answerChoice;
+
+    const one = 1;
+    const two = 2;
+    const tree = 3;
+    switch (difficulty) {
+    case 'easy':
+      return one;
+    case 'medium':
+      return two;
+    case 'hard':
+      return tree;
+
+    default:
+      break;
+    }
+  };
+
   selectAnswer(index) {
+    const { answers } = this.state;
+    const testTimer = this.stopWatch();
     this.setState({
       selectedAnswer: index,
     });
+    console.log(answers[1]);
+    if (answers[index].correct === true) {
+      this.setState({
+        score: 10 + (this.dificultLevel() * Number(testTimer)),
+      });
+    }
+    console.log(' score false');
   }
 
   borderAnswer(correct) {
@@ -83,6 +130,7 @@ class Game extends React.Component {
       >
         Next
       </button>);
+
     return (
       <div>
         <Header />
@@ -130,4 +178,5 @@ Game.propTypes = {
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
+
 export default connect()(Game);
