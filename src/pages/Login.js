@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import getApi from '../services/api';
+import { getApi } from '../services/api';
 import SettingsButton from '../components/SetingsButton';
 import { getUserInfo } from '../redux/actions';
 
@@ -35,8 +35,12 @@ class Login extends Component {
   handleClick = async () => {
     const { nome, email } = this.state;
     const api = await getApi();
-    console.log(api);
     const { history, dispatch } = this.props;
+    if (api.response_code !== 0) {
+      localStorage.removeItem('token');
+      dispatch(resetUser());
+      return history.push('/');
+    }
     localStorage.setItem('token', api.token);
     dispatch(getUserInfo({ nome, email }));
     history.push('/home');
@@ -45,8 +49,6 @@ class Login extends Component {
   handleSettingsButton = () => {
     const { history } = this.props;
     history.push('/settings');
-    console.log(history);
-    console.log('go');
   };
 
   render() {
@@ -98,4 +100,5 @@ Login.propTypes = {
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
+
 export default connect()(Login);
