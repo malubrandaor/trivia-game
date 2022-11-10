@@ -130,5 +130,4 @@ Game.propTypes = {
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
-// Teste
 export default connect()(Game);
