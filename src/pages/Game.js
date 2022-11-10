@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// import { editableInputTypes } from '@testing-library/user-event/dist/utils';
 import { getQuestions } from '../services/api';
 import Header from '../components/Header';
 import { resetUser } from '../redux/actions';
@@ -17,7 +16,8 @@ function shuffleArray(array) {
   return newArr;
 }
 
-class Home extends React.Component {
+
+class Game extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -26,7 +26,6 @@ class Home extends React.Component {
       answers: [],
       selectedAnswer: undefined,
       answerTimeout: false,
-
     };
   }
 
@@ -60,6 +59,11 @@ class Home extends React.Component {
       });
     }, TIMEOUT_TIME);
   }
+
+  handleClickNext = async () => {
+    await getQuestions();
+    console.log('clicou');
+  };
 
   stopWatch = () => {
     const one = 1000;
@@ -118,6 +122,14 @@ class Home extends React.Component {
 
   render() {
     const { selectedAnswer, answers, questions, question, answerTimeout } = this.state;
+    const nextButton = (
+      <button
+        type="button"
+        data-testid="btn-next"
+        onClick={ this.handleClickNext }
+      >
+        Next
+      </button>);
 
     return (
       <div>
@@ -150,6 +162,7 @@ class Home extends React.Component {
                     {answer.answer}
                   </button>
                 ))}
+                { selectedAnswer && nextButton }
               </ul>
             </>
           ) : ''
@@ -159,11 +172,11 @@ class Home extends React.Component {
   }
 }
 
-Home.propTypes = {
+Game.propTypes = {
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-export default connect()(Home);
+export default connect()(Game);
