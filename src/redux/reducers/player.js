@@ -20,6 +20,11 @@ function userReducer(state = INITIAL_STATE, action) {
       nome: '',
       score: 0,
     };
+  case 'GET_TIMER':
+    return {
+      ...state,
+      score: action.payload,
+    };
   default:
     return state;
   }

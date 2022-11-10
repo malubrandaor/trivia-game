@@ -13,3 +13,11 @@ export function resetUser() {
     type: RESET_USER,
   };
 }
+
+export function getTimer(payload) {
+  return {
+    type: 'GET_TIMER',
+    payload,
+
+  };
+}

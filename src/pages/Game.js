@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getQuestions } from '../services/api';
 import Header from '../components/Header';
-import { resetUser } from '../redux/actions';
+import { getTimer, resetUser } from '../redux/actions';
 
 const TIMEOUT_TIME = 30000;
 
@@ -16,7 +16,6 @@ function shuffleArray(array) {
   return newArr;
 }
 
-
 class Game extends React.Component {
   constructor() {
     super();
@@ -26,6 +25,8 @@ class Game extends React.Component {
       answers: [],
       selectedAnswer: undefined,
       answerTimeout: false,
+      timer: 30,
+      score: 0,
     };
   }
 
@@ -60,6 +61,12 @@ class Game extends React.Component {
     }, TIMEOUT_TIME);
   }
 
+  // componentDidUpdate() {
+  //   const { timer } = this.state;
+  //   this.stopWatch();
+  //   console.log(timer);
+  // }
+
   handleClickNext = async () => {
     await getQuestions();
     console.log('clicou');
@@ -67,16 +74,17 @@ class Game extends React.Component {
 
   stopWatch = () => {
     const one = 1000;
-    setInterval(() => {
-      this.answerTime();
-    // console.log(test);
+    const interval = setInterval(() => {
+      const { timer } = this.state;
+      console.log(timer);
+      if (timer > 0) {
+        this.setState((prev) => ({
+          timer: prev.timer - 1,
+        }));
+      } else {
+        clearInterval(interval);
+      }
     }, one);
-  };
-
-  answerTime = () => {
-    let second = 1;
-    second += 1;
-    return second;
   };
 
   dificultLevel = () => {
@@ -100,19 +108,28 @@ class Game extends React.Component {
     }
   };
 
+  testScore = () => {
+    const { score } = this.state;
+    const { dispatch } = this.props;
+    dispatch(getTimer(score));
+  };
+
   selectAnswer(index) {
-    const { answers } = this.state;
-    const testTimer = this.stopWatch();
+    const ten = 10;
+    const { answers, timer } = this.state;
     this.setState({
       selectedAnswer: index,
     });
-    console.log(answers[1]);
     if (answers[index].correct === true) {
       this.setState({
-        score: 10 + (this.dificultLevel() * Number(testTimer)),
+        score: ten + (this.dificultLevel() * timer),
+        timer: 0,
+      });
+    } else {
+      this.setState({
+        timer: 0,
       });
     }
-    console.log(' score false');
   }
 
   borderAnswer(correct) {
@@ -167,6 +184,7 @@ class Game extends React.Component {
             </>
           ) : ''
         }
+        <p>{ this.testScore() }</p>
       </div>
     );
   }
