@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+// import { editableInputTypes } from '@testing-library/user-event/dist/utils';
 import { getQuestions } from '../services/api';
 import Header from '../components/Header';
 import { resetUser } from '../redux/actions';
@@ -25,6 +26,7 @@ class Home extends React.Component {
       answers: [],
       selectedAnswer: undefined,
       answerTimeout: false,
+
     };
   }
 
@@ -36,6 +38,8 @@ class Home extends React.Component {
       dispatch(resetUser());
       return history.push('/');
     }
+
+    this.stopWatch();
 
     const answers = shuffleArray(api.results.length > 0 ? [
       { answer: api.results[0].correct_answer, correct: true },
@@ -57,10 +61,54 @@ class Home extends React.Component {
     }, TIMEOUT_TIME);
   }
 
+  stopWatch = () => {
+    const one = 1000;
+    setInterval(() => {
+      this.answerTime();
+    // console.log(test);
+    }, one);
+  };
+
+  answerTime = () => {
+    let second = 1;
+    second += 1;
+    return second;
+  };
+
+  dificultLevel = () => {
+    const { questions } = this.state;
+    const answerChoice = questions[0];
+    const { difficulty } = answerChoice;
+
+    const one = 1;
+    const two = 2;
+    const tree = 3;
+    switch (difficulty) {
+    case 'easy':
+      return one;
+    case 'medium':
+      return two;
+    case 'hard':
+      return tree;
+
+    default:
+      break;
+    }
+  };
+
   selectAnswer(index) {
+    const { answers } = this.state;
+    const testTimer = this.stopWatch();
     this.setState({
       selectedAnswer: index,
     });
+    console.log(answers[1]);
+    if (answers[index].correct === true) {
+      this.setState({
+        score: 10 + (this.dificultLevel() * Number(testTimer)),
+      });
+    }
+    console.log(' score false');
   }
 
   borderAnswer(correct) {
