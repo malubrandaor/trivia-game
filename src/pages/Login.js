@@ -43,7 +43,7 @@ class Login extends Component {
     }
     localStorage.setItem('token', api.token);
     dispatch(getUserInfo({ nome, email }));
-    history.push('/home');
+    history.push('/game');
   };
 
   handleSettingsButton = () => {

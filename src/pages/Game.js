@@ -16,7 +16,7 @@ function shuffleArray(array) {
   return newArr;
 }
 
-class Home extends React.Component {
+class Game extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -57,6 +57,11 @@ class Home extends React.Component {
     }, TIMEOUT_TIME);
   }
 
+  handleClickNext = async () => {
+    await getQuestions();
+    console.log('clicou');
+  };
+
   selectAnswer(index) {
     this.setState({
       selectedAnswer: index,
@@ -70,7 +75,14 @@ class Home extends React.Component {
 
   render() {
     const { selectedAnswer, answers, questions, question, answerTimeout } = this.state;
-
+    const nextButton = (
+      <button
+        type="button"
+        data-testid="btn-next"
+        onClick={ this.handleClickNext }
+      >
+        Next
+      </button>);
     return (
       <div>
         <Header />
@@ -102,6 +114,7 @@ class Home extends React.Component {
                     {answer.answer}
                   </button>
                 ))}
+                { selectedAnswer && nextButton }
               </ul>
             </>
           ) : ''
@@ -111,11 +124,11 @@ class Home extends React.Component {
   }
 }
 
-Home.propTypes = {
+Game.propTypes = {
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-export default connect()(Home);
+export default connect()(Game);

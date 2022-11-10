@@ -45,7 +45,7 @@ describe('Testes da pagina de Login', () => {
 
     expect(history.location.pathname).toBe('/settings');
   });
-  it('Testa se ao clicar no botao play, a pagina é redirecionada para /home', async () => {
+  it('Testa se ao clicar no botao play, a pagina é redirecionada para /game', async () => {
     const { history } = renderWithRouterAndRedux(<App />);
 
     const loginButton = screen.getByRole('button', { name: /play/i });
@@ -63,7 +63,7 @@ describe('Testes da pagina de Login', () => {
     
     const time = 3000;
     await new Promise((response) => setTimeout(response, time))
-    expect(history.location.pathname).toBe('/home');
+    expect(history.location.pathname).toBe('/game');
   });
   it('Testa se ao clicar em play um fetch é chamado', async () => {
     jest.spyOn(global, 'fetch');
