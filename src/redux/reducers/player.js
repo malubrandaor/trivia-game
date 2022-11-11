@@ -1,9 +1,12 @@
-import { GET_USER_INFO, RESET_USER, ADD_SCORE } from '../actions';
+import {
+  GET_USER_INFO, RESET_USER, ADD_SCORE, CORRECT_ANSWERS,
+} from '../actions';
 
 const INITIAL_STATE = {
   emailG: '',
   nome: '',
   score: 0,
+  assertions: 0,
 };
 
 function userReducer(state = INITIAL_STATE, action) {
@@ -24,6 +27,11 @@ function userReducer(state = INITIAL_STATE, action) {
     return {
       ...state,
       score: action.payload,
+    };
+  case CORRECT_ANSWERS:
+    return {
+      ...state,
+      assertions: action.payload,
     };
   default:
     return state;
