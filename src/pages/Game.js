@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getQuestions } from '../services/api';
 import Header from '../components/Header';
-import { resetUser, addScore } from '../redux/actions';
+import { resetUser, addScore, correctAnswers } from '../redux/actions';
 
 const TIMEOUT_TIME = 30000;
 
@@ -27,6 +27,7 @@ class Game extends React.Component {
       answerTimeout: false,
       timer: 30,
       score: 0,
+      assertions: 0,
     };
   }
 
@@ -81,7 +82,9 @@ class Game extends React.Component {
     this.setState((prev) => ({
       question: prev.question + 1,
       answers: shuffleArray(prev.questions.length > 0 ? [
-        { answer: prev.questions[prev.question + 1].correct_answer, correct: true },
+        { answer: prev.questions[prev.question + 1].correct_answer,
+          correct: true,
+        },
         ...prev.questions[prev.question + 1].incorrect_answers.map((ia) => (
           { answer: ia, correct: false }
         )),
@@ -126,7 +129,11 @@ class Game extends React.Component {
       this.setState((prev) => ({
         score: (ten + (points * prev.timer)) + prev.score,
         timer: 0,
-      }));
+        assertions: prev.assertions + 1,
+      }), () => {
+        const { assertions } = this.state;
+        dispatch(correctAnswers(assertions));
+      });
 
       dispatch(addScore((ten + (points * timer)) + score));
     } else {
@@ -142,7 +149,8 @@ class Game extends React.Component {
   }
 
   render() {
-    const { selectedAnswer, answers, questions, question, answerTimeout } = this.state;
+    const {
+      selectedAnswer, answers, questions, question, answerTimeout } = this.state;
     const nextButton = (
       <button
         type="button"
