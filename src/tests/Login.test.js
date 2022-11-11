@@ -80,7 +80,7 @@ describe('Testes da pagina de Login', () => {
     userEvent.type(emailInput, 'diogo@trybe.com');
     userEvent.type(nameInput, 'Diogo');    
 
-    act(() => {
+    await act( async () => {
       userEvent.click(loginButton);
     });
     expect(global.fetch).toHaveBeenCalled();
