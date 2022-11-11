@@ -1,6 +1,6 @@
 export const GET_USER_INFO = 'GET_USER_INFO';
 export const RESET_USER = 'RESET_USER';
-export const CORRECT_ANSWERS = 'CORRECT_ANSWERS';
+export const ADD_SCORE = 'ADD_SCORE';
 
 export function getUserInfo(payload) {
   return {
@@ -15,10 +15,9 @@ export function resetUser() {
   };
 }
 
-export function getTimer(payload) {
+export function addScore(payload) {
   return {
-    type: 'GET_TIMER',
+    type: ADD_SCORE,
     payload,
-
   };
 }

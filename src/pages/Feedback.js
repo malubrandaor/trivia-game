@@ -6,7 +6,8 @@ import Header from '../components/Header';
 
 class Feedback extends React.Component {
   render() {
-    const { correctAnswers } = this.props;
+    const { score } = this.props;
+
     const minimo = 3;
     return (
       <div>
@@ -15,8 +16,8 @@ class Feedback extends React.Component {
           <h2>
             Respostas Certas:
           </h2>
-          <h3 data-testid="feedback-total">{correctAnswers}</h3>
-          { correctAnswers < minimo ? (
+          <h3 data-testid="feedback-total">{score}</h3>
+          { score < minimo ? (
             <li data-testid="feedback-text">Could be better...</li>
           ) : (
             <li data-testid="feedback-text">Well Done!</li>
@@ -28,11 +29,11 @@ class Feedback extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  correctAnswers: state.user.correctAnswers,
+  score: state.player.score,
 });
 
 Feedback.propTypes = {
-  correctAnswers: PropTypes.number,
+  score: PropTypes.number,
 }.isRequired;
 
 export default connect(mapStateToProps)(Feedback);
