@@ -1,4 +1,4 @@
-import { GET_USER_INFO, RESET_USER } from '../actions';
+import { GET_USER_INFO, RESET_USER, CORRECT_ANSWERS } from '../actions';
 
 const INITIAL_STATE = {
   emailG: '',
@@ -25,6 +25,9 @@ function userReducer(state = INITIAL_STATE, action) {
       ...state,
       score: action.payload,
     };
+  case CORRECT_ANSWERS:
+    return {
+      ...state, correctAnswers: payload };
   default:
     return state;
   }

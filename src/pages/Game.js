@@ -120,6 +120,7 @@ class Game extends React.Component {
     this.setState({
       selectedAnswer: index,
     });
+    console.log(index);
     if (answers[index].correct === true) {
       this.setState({
         score: ten + (this.dificultLevel() * timer),
@@ -179,7 +180,7 @@ class Game extends React.Component {
                     {answer.answer}
                   </button>
                 ))}
-                { selectedAnswer && nextButton }
+                { typeof selectedAnswer !== 'undefined' ? nextButton : undefined }
               </ul>
             </>
           ) : ''
