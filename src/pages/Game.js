@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getQuestions } from '../services/api';
 import Header from '../components/Header';
-import { getTimer, resetUser } from '../redux/actions';
+import { resetUser, addScore } from '../redux/actions';
 
 const TIMEOUT_TIME = 30000;
 
@@ -68,8 +68,27 @@ class Game extends React.Component {
   // }
 
   handleClickNext = async () => {
-    await getQuestions();
-    console.log('clicou');
+    const MAX_QUESTION = 5;
+    const { history, dispatch } = this.props;
+
+    const { question, score } = this.state;
+
+    if ((question + 1) >= MAX_QUESTION) {
+      dispatch(addScore(score));
+      return history.push('/feedback');
+    }
+
+    this.setState((prev) => ({
+      question: prev.question + 1,
+      answers: shuffleArray(prev.questions.length > 0 ? [
+        { answer: prev.questions[prev.question + 1].correct_answer, correct: true },
+        ...prev.questions[prev.question + 1].incorrect_answers.map((ia) => (
+          { answer: ia, correct: false }
+        )),
+      ] : []),
+      selectedAnswer: undefined,
+      answerTimeout: false,
+    }));
   };
 
   stopWatch = () => {
@@ -87,45 +106,29 @@ class Game extends React.Component {
     }, one);
   };
 
-  dificultLevel = () => {
-    const { questions } = this.state;
-    const answerChoice = questions[0];
-    const { difficulty } = answerChoice;
-
-    const one = 1;
-    const two = 2;
-    const tree = 3;
-    switch (difficulty) {
-    case 'easy':
-      return one;
-    case 'medium':
-      return two;
-    case 'hard':
-      return tree;
-
-    default:
-      break;
-    }
-  };
-
-  testScore = () => {
-    const { score } = this.state;
-    const { dispatch } = this.props;
-    dispatch(getTimer(score));
-  };
-
   selectAnswer(index) {
     const ten = 10;
-    const { answers, timer } = this.state;
+    const { dispatch } = this.props;
+    const { score, timer, answers, questions, question } = this.state;
     this.setState({
       selectedAnswer: index,
     });
-    console.log(index);
+
     if (answers[index].correct === true) {
-      this.setState({
-        score: ten + (this.dificultLevel() * timer),
+      const dificultLevel = {
+        easy: 1,
+        medium: 2,
+        hard: 3,
+      };
+
+      const points = dificultLevel[questions[question].difficulty];
+
+      this.setState((prev) => ({
+        score: (ten + (points * prev.timer)) + prev.score,
         timer: 0,
-      });
+      }));
+
+      dispatch(addScore((ten + (points * timer)) + score));
     } else {
       this.setState({
         timer: 0,
@@ -185,7 +188,6 @@ class Game extends React.Component {
             </>
           ) : ''
         }
-        <p>{ this.testScore() }</p>
       </div>
     );
   }
