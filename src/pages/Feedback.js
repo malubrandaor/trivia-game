@@ -5,6 +5,16 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 
 class Feedback extends React.Component {
+  handlePlayAgain = () => {
+    const { history } = this.props;
+    history.push('/');
+  };
+
+  handleRanking = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  };
+
   render() {
     const { assertions, score } = this.props;
 
@@ -25,6 +35,24 @@ class Feedback extends React.Component {
             <li data-testid="feedback-text">Well Done!</li>
           )}
         </main>
+        <div>
+          <button
+            type="button"
+            data-testid="btn-play-again"
+            onClick={ this.handlePlayAgain }
+          >
+            Play Again
+
+          </button>
+          <button
+            type="button"
+            data-testid="btn-ranking"
+            onClick={ this.handleRanking }
+          >
+            Ranking
+
+          </button>
+        </div>
       </div>
     );
   }
