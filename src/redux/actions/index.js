@@ -1,5 +1,6 @@
 export const GET_USER_INFO = 'GET_USER_INFO';
 export const RESET_USER = 'RESET_USER';
+export const CORRECT_ANSWERS = 'CORRECT_ANSWERS';
 
 export function getUserInfo(payload) {
   return {
