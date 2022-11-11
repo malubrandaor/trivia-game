@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getApi } from '../services/api';
 import SettingsButton from '../components/SetingsButton';
-import { getUserInfo } from '../redux/actions';
+import { getUserInfo, resetUser } from '../redux/actions';
 
 class Login extends Component {
   constructor() {
